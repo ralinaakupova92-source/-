@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Российские топ-инфлюенсеры | Рейтинг влияния 2025</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f9ff;
+            color: #0a2b3e;
+            scroll-behavior: smooth;
+        }
+
+        /* декоративный фон */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 0% 20%, rgba(255,245,235,0.6), rgba(220,240,255,0.4));
+            pointer-events: none;
+            z-index: -2;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 2rem;
+        }
+
+        /* Премиум шапка */
+        .hero {
+            background: linear-gradient(115deg, #0a2a3b 0%, #1a5a7a 100%);
+            border-radius: 50px;
+            padding: 3rem 2.5rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            color: white;
+            box-shadow: 0 25px 35px -14px rgba(0,0,0,0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: "⭐";
+            font-size: 210px;
+            position: absolute;
+            bottom: -50px;
+            right: -30px;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+        .hero h1 {
+            font-size: 3.4rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff, #ffe0b5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 1rem auto 0;
+        }
+        .stats-badge {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .stat-chip {
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(12px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Панель управления: фильтры + сортировка */
+        .control-panel {
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 70px;
+            padding: 0.8rem 1.8rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid rgba(255,255,255,0.7);
+        }
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+        }
+        .filter-btn {
+            background: #eef3fc;
+            border: none;
+            padding: 0.65rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #1b4f6e;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .filter-btn i { font-size: 0.9rem; }
+        .filter-btn.active {
+            background: #1b5e7e;
+            color: white;
+            box-shadow: 0 8px 18px rgba(27,94,126,0.3);
+            transform: scale(1.02);
+        }
+        .sort-select {
+            background: #eef3fc;
+            border: none;
+            padding: 0.65rem 1.5rem;
+            border-radius: 60px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Сетка карточек */
+        .influencers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Карточка премиум-класса */
+        .card {
+            background: white;
+            border-radius: 36px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.08);
+            cursor: pointer;
+            position: relative;
+        }
+        .card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 32px 48px -16px rgba(0,0,0,0.2);
+        }
+        .img-wrapper {
+            position: relative;
+            height: 270px;
+            overflow: hidden;
+        }
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .card:hover .card-img {
+            transform: scale(1.05);
+        }
+        .rank-badge {
+            position: absolute;
+            top: 18px;
+            left: 18px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(6px);
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            color: #ffd966;
+        }
+        .card-content {
+            padding: 1.6rem;
+        }
+        .category-tag {
+            display: inline-block;
+            background: #eef2ff;
+            padding: 0.2rem 1rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            margin-bottom: 0.7rem;
+            color: #1b5e7e;
+        }
+        .card h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+        }
+        .metrics {
+            display: flex;
+            gap: 0.8rem;
+            margin: 0.9rem 0;
+            flex-wrap: wrap;
+        }
+        .metric {
+            background: #f4f9fe;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .bio-preview {
+            font-size: 0.85rem;
+            color: #3a5a78;
+            line-height: 1.45;
+            margin: 0.9rem 0;
+            border-left: 3px solid #f5b042;
+            padding-left: 0.8rem;
+        }
+        .social-icons {
+            display: flex;
+            gap: 14px;
+            margin: 0.8rem 0 0.3rem;
+            color: #6b8eae;
+        }
+        .social-icons i {
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+        .view-detail {
+            margin-top: 0.8rem;
+            font-weight: 700;
+            color: #1b5e7e;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Пагинация */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 3rem;
+        }
+        .page-link {
+            background: white;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 60px;
+            font-weight: 800;
+            text-decoration: none;
+            color: #1b5e7e;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .page-link.active-page {
+            background: #1b5e7e;
+            color: white;
+            transform: scale(1.05);
+        }
+        footer {
+            text-align: center;
+            margin-top: 3.5rem;
+            padding: 2rem;
+            color: #6b8eae;
+            border-top: 1px solid #dfe8f0;
+        }
+        @media (max-width: 750px) {
+            .container { padding: 1rem; }
+            .hero h1 { font-size: 2rem; }
+            .control-panel { flex-direction: column; border-radius: 40px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="hero">
+        <h1><i class="fas fa-crown"></i> Топ-30 инфлюенсеров России</h1>
+        <p>Лидеры мнений, создатели трендов и главные голоса поколения</p>
+        <div class="stats-badge">
+            <span class="stat-chip"><i class="fas fa-users"></i> 30+ лидеров</span>
+            <span class="stat-chip"><i class="fas fa-chart-line"></i> Совокупный охват 280M+</span>
+            <span class="stat-chip"><i class="fas fa-calendar-alt"></i> Рейтинг 2025</span>
+        </div>
+    </div>
+
+    <div class="control-panel">
+        <div class="filters" id="filterContainer">
+            <button class="filter-btn active" data-cat="all"><i class="fas fa-globe"></i> Все</button>
+            <button class="filter-btn" data-cat="Лайфстайл/Бьюти"><i class="fas fa-heart"></i> Лайфстайл/Бьюти</button>
+            <button class="filter-btn" data-cat="Юмор/Развлечения"><i class="fas fa-laugh"></i> Юмор/Развлечения</button>
+            <button class="filter-btn" data-cat="Технологии/Бизнес"><i class="fas fa-chart-line"></i> Технологии/Бизнес</button>
+            <button class="filter-btn" data-cat="Спорт/Фитнес"><i class="fas fa-dumbbell"></i> Спорт/Фитнес</button>
+            <button class="filter-btn" data-cat="Образование/Мотивация"><i class="fas fa-brain"></i> Образование/Мотивация</button>
+        </div>
+        <select id="sortSelect" class="sort-select">
+            <option value="followers">⭐ По подписчикам (убыв.)</option>
+            <option value="engagement">🔥 По вовлеченности (ER)</option>
+            <option value="name">📝 По имени (А-Я)</option>
+        </select>
+    </div>
+
+    <div id="influencersGrid" class="influencers-grid"></div>
+    <div class="pagination" id="paginationControls"></div>
+    <footer>✨ Нажмите на карточку, чтобы увидеть расширенную аналитику, контакты и историю рекламных интеграций</footer>
+</div>
+
+<script>
+    // ---------- БОЛЬШОЙ МАССИВ: 30 инфлюенсеров с уникальными картинками (разные ID) ----------
+    const influencersData = [
+        { id:1, name:"Ида Галич", category:"Лайфстайл/Бьюти", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Ida_Galich_ZAY06124.jpg/960px-Ida_Galich_ZAY06124.jpg", followers:"5.2M", engagement:"4.8%", mainPlatform:"Instagram, YouTube", bio:"Честные подкасты, бьюти-лайфхаки, предприниматель.", fullInfo:"Ведущая шоу «Орел и Решка», основатель бренда IDA, коллаборации с L'Oréal, Samsung.", insta:"@ida_galich", youtube:"Ида Галич", tiktok:"@idagalich" },
+        { id:2, name:"Ваня Дмитриенко", category:"Юмор/Развлечения", img:"https://img.muz-tv.ru/m/storage/images/news/crops/news-page/mffJimjFDHEUXPt4eaybEO0CljTAz4GrV24S7nbA.webp@620x350_10_401b9f640ba2a11321affa2b53a46ac97a8c488f.webp", followers:"7.1M", engagement:"6.2%", mainPlatform:"TikTok, Instagram", bio:"Креатор вирусных скетчей, музыкальные пародии.", fullInfo:"Номинант Nickelodeon Kids Choice Awards 2024, шоу «ЧБД».", insta:"@vanya_dm", youtube:"Ваня Дмитриенко", tiktok:"@vanyadmitrienko" },
+        { id:3, name:"Катя Клэп", category:"Лайфстайл/Бьюти", img:"https://avatars.mds.yandex.net/get-entity_search/2115421/1265434304/S600xU_2x", followers:"4.5M", engagement:"5.1%", mainPlatform:"YouTube, Instagram", bio:"Бьюти-эксперт, линия косметики KLEP.", fullInfo:"Премия Glamour Influencer of the Year, коллаборация с Huda Beauty.", insta:"@katyaclap", youtube:"Katya Klap", tiktok:"@katyaclap" },
+        { id:4, name:"Николай Соболев", category:"Технологии/Бизнес", img:"https://up.tsargrad.tv/uploads/31-12-2024/111.png", followers:"3.8M", engagement:"3.4%", mainPlatform:"YouTube, Telegram", bio:"Бизнес-журналист, инвестор, расследования.", fullInfo:"Автор бестселлера, более 20 успешных стартапов в портфеле.", insta:"@sobolev", youtube:"Николай Соболев", tiktok:"" },
+        { id:5, name:"Антон Шастун", category:"Юмор/Развлечения", img:"https://images.thevoicemag.ru/upload/img_cache/ddd/ddd4666fd61f44bab868ea4065dfea21_cropped_510x638.webp", followers:"6.4M", engagement:"5.5%", mainPlatform:"Instagram, Likee", bio:"Резидент Comedy Club, импровизация.", fullInfo:"Шоу «Однажды в России», тур по городам РФ, участие в кино.", insta:"@shastun_anton", youtube:"Антон Шастун", tiktok:"@shastun" },
+        { id:6, name:"Мария Горбань", category:"Лайфстайл/Бьюти", img:"https://img5tv.cdnvideo.ru/webp/shared/files/202405/1_2005502.jpg", followers:"2.9M", engagement:"4.2%", mainPlatform:"Instagram, Telegram", bio:"Актриса, блогер о материнстве и моде.", fullInfo:"Бренд детской одежды MG kids, более 30 фильмов.", insta:"@mariagorban", youtube:"", tiktok:"" },
+        { id:7, name:"Дмитрий Масленников", category:"Технологии/Бизнес", img:"https://resizer.mail.ru/p/0c8e5c34-7a4f-55ec-8934-5de60272456e/AQACzmVGvaUBF-pxpO_a6-qgg-VZW2humVTyeAKRCxy7yZJN6kNMsrWKL-scqphzLw6V8TZ_APffln_pK_V-MaLJrM0.jpg", followers:"2.2M", engagement:"3.9%", mainPlatform:"YouTube, VK", bio:"Техно-блогер, обзоры AI и гаджетов.", fullInfo:"Автор подкаста «Нейросети наступают», эксперт по цифровизации.", insta:"@maslennikov", youtube:"Dmitry Maslennikov", tiktok:"" },
+        { id:8, name:"Алексей Столяров", category:"Спорт/Фитнес", img:"https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Алексей_столяров_ава.jpg/500px-Алексей_столяров_ава.jpg", followers:"3.1M", engagement:"6.8%", mainPlatform:"Instagram, YouTube", bio:"Фитнес-эксперт, трансформации тела.", fullInfo:"Амбассадор Nike, создатель приложения StolyarovFit (1M+ скачиваний).", insta:"@stolyarov", youtube:"Alexey Stolyarov", tiktok:"@stolyarovfit" },
+        { id:9, name:"Юлия Гаврилина", category:"Спорт/Фитнес", img:"https://resizer.mail.ru/p/dc0041c4-5b30-523c-a024-3fd91015c490/AQACjmm8euI1pxu3rjKqSuFuTsEeRNhlHjbo7Rxmet63coAXbsfjEpim_ZM7PIxLJiWr8wM7MO6NWEY9Qa5LomGRzv8.jpg", followers:"1.9M", engagement:"5.3%", mainPlatform:"Instagram, Telegram", bio:"Йога, осознанное движение, ретриты.", fullInfo:"Автор книги «Гибкость тела и сознания», 200+ ретритов.", insta:"@gavrilinayoga", youtube:"", tiktok:"" },
+        { id:10, name:"Егор Крид", category:"Юмор/Развлечения", img:"https://static.1tv.ru/uploads/project/member/image/2022/11/28/1063/big/1063_big_e7e839668b.png", followers:"8.9M", engagement:"4.0%", mainPlatform:"Instagram, TikTok", bio:"Певец, актёр, икона стиля.", fullInfo:"Премии Муз-ТВ, продакшн-лейбл Kreed, туры по РФ и СНГ.", insta:"@egorkreed", youtube:"Egor Kreed", tiktok:"@egorkreed" },
+        { id:11, name:"Роман Каграманов", category:"Технологии/Бизнес", img:"https://ru.tv/uploads/1a/11/7b3e5efd29d78d5f7be456525d7c.jpg", followers:"1.4M", engagement:"4.9%", mainPlatform:"Telegram, YouTube", bio:"Инвестор, криптоэксперт.", fullInfo:"Венчурный фонд Kagramanov Ventures, спикер ВЭБ.РФ.", insta:"@rkagramanov", youtube:"Роман Каграманов", tiktok:"" },
+        { id:12, name:"Саша Спилберг", category:"Лайфстайл/Бьюти", img:"https://avatars.mds.yandex.net/i?id=db339bed7326940e203d9d3fbf763025df338c1d-5912078-images-thumbs&n=13", followers:"4.7M", engagement:"6.0%", mainPlatform:"Instagram, YouTube Shorts", bio:"Танцы, челленджи, стиль.", fullInfo:"Линия одежды Spilberg Crew, амбассадор L'Oréal Paris.", insta:"@sasha_spilberg", youtube:"Sasha Spilberg", tiktok:"@spilberg" },
+        { id:13, name:"Настя Ивлеева", category:"Лайфстайл/Бьюти", img:"https://super.ru/image/rs:fill:1200:630::/quality:90/plain/s3:/super-static/prod/1779433724796.png", followers:"9.2M", engagement:"5.9%", mainPlatform:"Instagram, YouTube", bio:"Телеведущая, актриса, блогер.", fullInfo:"Фильм «Текст», шоу «Орел и Решка», OWN production.", insta:"@ivleeva", youtube:"Nastya Ivleeva", tiktok:"@ivleeva" },
+        { id:14, name:"Артур Бабич", category:"Технологии/Бизнес", img:"https://images.genius.com/03ac62aad6073c13d47c12ccc166ee16.1000x1000x1.png", followers:"1.2M", engagement:"3.2%", mainPlatform:"YouTube", bio:"Маркетинг, кейсы по бизнесу.", fullInfo:"Основатель Like 360, ментор в Сколково.", insta:"@arturbabich", youtube:"Артур Бабич", tiktok:"" },
+        { id:15, name:"Ольга Бузова", category:"Юмор/Развлечения", img:"https://sun1-13.userapi.com/s/v1/ig2/iLOwGfupH25O7yfwrBJqcNHQO463T5TESXFYe79XktL0DqYhuYl6y6I_72ucx_UZhZPy3SNv28WEc9zpkUhZ1-X1.jpg?quality=95&as=32x43,48x64,72x96,108x144,160x213,240x320,360x480,480x640,540x720,640x853,720x960,960x1280&from=bu&cs=640x0", followers:"12.3M", engagement:"3.8%", mainPlatform:"Instagram", bio:"Певица, телеведущая, медийное лицо.", fullInfo:"Шоу «Бузовье», хит «Мало половин», коллаборации с Wildberries.", insta:"@buzova86", youtube:"Ольга Бузова", tiktok:"@buzova" },
+        { id:16, name:"Илья Варламов", category:"Образование/Мотивация", img:"https://avatars.mds.yandex.net/i?id=541368ad534e0e83671ed52b62de2fe2dc689629-5664541-images-thumbs&n=13", followers:"2.5M", engagement:"2.9%", mainPlatform:"Telegram, YouTube", bio:"Урбанист, блогер-исследователь.", fullInfo:"Автор книг о городах, премия «ТОП-блогер 2024».", insta:"@varlamov", youtube:"Ilya Varlamov", tiktok:"" },
+        { id:17, name:"Татьяна Мингалимова", category:"Спорт/Фитнес", img:"https://avatars.mds.yandex.net/i?id=0f45c611590564e1093be59c22540cee_l-9066083-images-thumbs&n=13", followers:"2.3M", engagement:"7.1%", mainPlatform:"Instagram", bio:"Фитнес-модель, нутрициолог.", fullInfo:"Сооснователь FitStars, программы питания для звезд.", insta:"@mingalimova", youtube:"", tiktok:"@mingalimova" },
+        { id:18, name:"Виталий Наливкин", category:"Юмор/Развлечения", img:"https://avatars.mds.yandex.net/i?id=46e7144bd9f3063279df589b0688081d_l-10229043-images-thumbs&n=13", followers:"3.6M", engagement:"5.2%", mainPlatform:"TikTok", bio:"Пранки, комедийные скетчи.", fullInfo:"Лауреат премии «ТикТокер года», более 1 млрд просмотров.", insta:"@nalivkin", youtube:"", tiktok:"@vitaliknalivkin" },
+        { id:19, name:"Сергей Мезенцев", category:"Технологии/Бизнес", img:"http://img.gazeta.ru/files3/949/16320949/RIA_6618419-pic_32ratio_900x600-900x600-51863.jpg", followers:"987K", engagement:"4.1%", mainPlatform:"Telegram", bio:"IT-предприниматель, крипто-аналитик.", fullInfo:"Спикер Российской венчурной академии, автор канала «Крипто-среда».", insta:"@mezentsev", youtube:"", tiktok:"" },
+        { id:20, name:"Лена Шейк", category:"Лайфстайл/Бьюти", img:"https://avatars.mds.yandex.net/i?id=4e25943c195df2c2ef9fb8d3dc34654e_l-5875771-images-thumbs&n=13", followers:"6.8M", engagement:"4.5%", mainPlatform:"Instagram", bio:"Топ-модель, бьюти-икона.", fullInfo:"Контракты Versace, Burberry, лицо Maybelline New York.", insta:"@lenasheiko", youtube:"", tiktok:"" },
+        { id:21, name:"Александр Гудков", category:"Юмор/Развлечения", img:"https://is1-ssl.mzstatic.com/image/thumb/0ffVGjdHhR2bEl88_khW1A/1200x675mf.jpg", followers:"3.4M", engagement:"4.3%", mainPlatform:"YouTube", bio:"Шоумен, актер озвучки.", fullInfo:"Шоу «Вечерний Ургант», YouTube-проект «Гудков», озвучка мультфильмов.", insta:"@gudkov", youtube:"Alexander Gudkov", tiktok:"" },
+        { id:22, name:"Ксения Бородина", category:"Лайфстайл/Бьюти", img:"https://avatars.mds.yandex.net/i?id=a57e5ae97aeab777423ebd457845c91350f7bd88-4027989-images-thumbs&n=13", followers:"7.2M", engagement:"3.7%", mainPlatform:"Instagram", bio:"Телеведущая Дома-2.", fullInfo:"Бренд косметики Kseniya, светская хроника.", insta:"@borodylia", youtube:"", tiktok:"" },
+        { id:23, name:"Михаил Лидин", category:"Образование/Мотивация", img:"https://avatars.mds.yandex.net/i?id=80cd56f171d5e2988d07e6dd61c5a6e759398a65-5193195-images-thumbs&n=13", followers:"1.1M", engagement:"4.4%", mainPlatform:"YouTube", bio:"Психология, саморазвитие.", fullInfo:"Автор курса «Эмоциональный интеллект», 100k+ учеников.", insta:"@lidin", youtube:"Mikhail Lidin", tiktok:"" },
+        { id:24, name:"Мари Сенн", category:"Лайфстайл/Бьюти", img:"https://avatars.mds.yandex.net/i?id=d187d9670c2fb7508bbc07278c6bc41eef385d3a-10350336-images-thumbs&n=13", followers:"2.0M", engagement:"5.0%", mainPlatform:"Instagram, TikTok", bio:"Стиль, путешествия, мода.", fullInfo:"Амбассадор Chanel Russia, Forbes 30 under 30.", insta:"@marisenn", youtube:"", tiktok:"@marisenn" },
+        { id:25, name:"Глеб Рандалайнен", category:"Спорт/Фитнес", img:"https://pr6.zoon.ru/SG3yuEyOpyZuj94pRw2CHg/908x1024%2Cq90/rKxjwZbnIG9eqRJFJGHu-vq5sFzuDa0mSMIZhhTHUPy_h-6G4wpj0-NHivurBtUSTJusNSoWjNUH4TD_Me9jgEHNdQp_FAlZPWsWQXZFRQ5YFyZYR6ibrnCQwuOnQFWY", followers:"1.7M", engagement:"6.3%", mainPlatform:"Instagram", bio:"Кроссфит, воркаут.", fullInfo:"Чемпион России по стритлифтингу, бренд спортивной экипировки.", insta:"@gleb_rand", youtube:"", tiktok:"" },
+        { id:26, name:"Тимур Батрутдинов", category:"Юмор/Развлечения", img:"https://avatars.mds.yandex.net/i?id=49f2ba9d09d10e7895471c10c7c19d1bb3cbf060-3580567-images-thumbs&n=13", followers:"4.9M", engagement:"4.1%", mainPlatform:"Instagram", bio:"Резидент Comedy Club, ведущий.", fullInfo:"Шоу «Студия СОЮЗ», сольные концерты.", insta:"@timurbatrutdinov", youtube:"", tiktok:"" },
+        { id:27, name:"Дмитрий Портнягин", category:"Технологии/Бизнес", img:"https://avatars.mds.yandex.net/get-entity_search/5107294/953032100/SUx182_2x", followers:"2.3M", engagement:"3.5%", mainPlatform:"YouTube", bio:"Инвестор, бизнес-наставник.", fullInfo:"Основатель холдинга Portnyagin Group, автор бизнес-курсов.", insta:"@portnyagin", youtube:"Дмитрий Портнягин", tiktok:"" },
+        { id:28, name:"Юлия Высоцкая", category:"Образование/Мотивация", img:"https://avatars.mds.yandex.net/i?id=9fab29ef44d70e55cf105cabd03a48a23e7b3d7f-5235887-images-thumbs&n=13", followers:"1.3M", engagement:"2.8%", mainPlatform:"Instagram", bio:"Кулинарные книги, здоровое питание.", fullInfo:"Шеф-блогер, телеведущая «Едим Дома», 10+ бестселлеров.", insta:"@vysotskaya", youtube:"", tiktok:"" },
+        { id:29, name:"Антон Лапенко", category:"Юмор/Развлечения", img:"https://avatars.mds.yandex.net/i?id=482f2cca646813b782dc0bb53141f84a89ca08df-12569904-images-thumbs&n=13", followers:"2.8M", engagement:"6.9%", mainPlatform:"YouTube, TikTok", bio:"Актер, стендап-комик.", fullInfo:"Создатель сериала «Внутри Лапенко», резидент Comedy Club.", insta:"@lapenko", youtube:"Anton Lapenko", tiktok:"@lapenko" },
+        { id:30, name:"Наталья Османн", category:"Лайфстайл/Бьюти", img:"https://avatars.mds.yandex.net/i?id=64ed5852908782804cdff6e719cf97d834a59603-5839308-images-thumbs&n=13", followers:"3.3M", engagement:"5.7%", mainPlatform:"Instagram", bio:"Путешествия, бьюти-блог.", fullInfo:"Лав-стори с брендом Mary Kay, гид по стилю, 500k отзывов.", insta:"@osmann", youtube:"", tiktok:"" }
+    ];
+
+    let currentCategory = "all";
+    let currentPage = 1;
+    let currentSort = "followers";
+    const itemsPerPage = 9;
+
+    function getFilteredSorted() {
+        let filtered = currentCategory === "all" ? [...influencersData] : influencersData.filter(inf => inf.category === currentCategory);
+        if (currentSort === "followers") filtered.sort((a,b) => parseFloat(b.followers) - parseFloat(a.followers));
+        else if (currentSort === "engagement") filtered.sort((a,b) => parseFloat(b.engagement) - parseFloat(a.engagement));
+        else filtered.sort((a,b) => a.name.localeCompare(b.name));
+        return filtered;
+    }
+
+    function renderCards() {
+        const filtered = getFilteredSorted();
+        const totalPages = Math.ceil(filtered.length / itemsPerPage);
+        if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+        const start = (currentPage-1)*itemsPerPage;
+        const pageData = filtered.slice(start, start+itemsPerPage);
+        const grid = document.getElementById("influencersGrid");
+        if(pageData.length === 0) { grid.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:3rem;">😢 Нет инфлюенсеров в этой категории</div>`; document.getElementById("paginationControls").innerHTML = ""; return; }
+        grid.innerHTML = pageData.map((inf, idx) => `
+            <div class="card" data-id="${inf.id}">
+                <div class="img-wrapper"><img class="card-img" src="${inf.img}" alt="${inf.name}" loading="lazy" onerror="this.src='https://picsum.photos/id/1/400/360'"><div class="rank-badge"><i class="fas fa-medal"></i> TOP ${(currentPage-1)*itemsPerPage + idx+1}</div></div>
+                <div class="card-content"><div class="category-tag">${inf.category}</div><h3>${inf.name}</h3><div class="metrics"><span class="metric"><i class="fas fa-users"></i> ${inf.followers}</span><span class="metric"><i class="fas fa-chart-simple"></i> ER ${inf.engagement}</span><span class="metric"><i class="fab fa-instagram"></i> ${inf.mainPlatform.split(',')[0]}</span></div><div class="bio-preview">${inf.bio}</div><div class="social-icons">${inf.insta ? `<i class="fab fa-instagram"></i>` : ''}${inf.youtube ? `<i class="fab fa-youtube"></i>` : ''}${inf.tiktok ? `<i class="fab fa-tiktok"></i>` : ''}</div><div class="view-detail">🔍 Полный профиль & контракты →</div></div>
+            </div>
+        `).join("");
+        document.querySelectorAll('.card').forEach(card => { card.addEventListener('click', () => { const id = parseInt(card.getAttribute('data-id')); const inf = influencersData.find(i=>i.id===id); if(inf){ localStorage.setItem('selectedInfluencer', JSON.stringify(inf)); window.location.href = 'details.html'; } }); });
+        renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+        const pagDiv = document.getElementById("paginationControls");
+        if(totalPages<=1) { pagDiv.innerHTML=""; return; }
+        let html='';
+        for(let i=1;i<=totalPages;i++) html+=`<a href="#" class="page-link ${i===currentPage ? 'active-page' : ''}" data-page="${i}">${i}</a>`;
+        pagDiv.innerHTML=html;
+        document.querySelectorAll('.page-link').forEach(link=>{ link.addEventListener('click',(e)=>{ e.preventDefault(); const page=parseInt(link.dataset.page); if(!isNaN(page) && page!==currentPage){ currentPage=page; renderCards(); window.scrollTo({top:500,behavior:'smooth'}); } }); });
+    }
+
+    // фильтры
+    document.querySelectorAll('.filter-btn').forEach(btn=>{ btn.addEventListener('click',()=>{ document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentCategory=btn.dataset.cat; currentPage=1; renderCards(); }); });
+    document.getElementById('sortSelect').addEventListener('change',(e)=>{ currentSort=e.target.value; currentPage=1; renderCards(); });
+    renderCards();
+</script>
+</body>
+</html>
